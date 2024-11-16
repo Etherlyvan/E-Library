@@ -1,30 +1,28 @@
-// /app/book/[id]/pages.tsx
-"use client"
-import { books } from "@/constants/mockData"
-import { useParams } from "next/navigation"
-import { useEffect, useState } from "react"
-import styles from './book.module.css'
+
+"use client";
+import { useState } from 'react';
+import { books } from "@/constants/mockData";
+import { useParams } from "next/navigation";
+import styles from './book.module.css';
 
 export default function BookPage() {
   const { id } = useParams();
-  const [content, setContent] = useState('');
-
   const selectedBook = books.find(book => id === String(book.id));
+
+  // Inisialisasi content langsung dari localStorage jika buku ditemukan
+  const initialContent = selectedBook ? localStorage.getItem(`bookContent${selectedBook.id}`) || '' : '';
+  const [content, setContent] = useState(initialContent);
+
   if (!selectedBook) return <p>Book not found</p>;
 
   const notify = () => alert("Your changes have been saved!");
 
   const handleSave = () => {
-    localStorage.setItem(`bookContent${selectedBook.id}`, content);
-    notify();
-  };
-
-  useEffect(() => {
-    const savedContent = localStorage.getItem(`bookContent${selectedBook.id}`);
-    if (savedContent) {
-      setContent(savedContent);
+    if (selectedBook) {
+      localStorage.setItem(`bookContent${selectedBook.id}`, content);
+      notify();
     }
-  }, [id]);
+  };
 
   return (
     <div className={styles.bookContainer}>
