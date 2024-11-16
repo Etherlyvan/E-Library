@@ -30,6 +30,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           placeholder: "password",
         },
         },
+        
         authorize: async (credentials) => {
             const validatedFields = SignInSchema.safeParse(credentials);
             if (!validatedFields.success) {
@@ -48,7 +49,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             if (!passwordMatch) return null;
             return user;
         }
-    }),
+    }), 
   ],
   //callback
   callbacks: {
